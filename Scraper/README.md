@@ -101,20 +101,14 @@ head(RealmPop)
 ```
 
 ```
-##            RealmName Alliance  Horde Type Roleplay        Region
-## realms.1     Aegwynn    71705  71877  PvP   Normal United States
-## realms.2  Aerie Peak   275469  90698  PvE   Normal United States
-## realms.3   Agamaggan    24256  28345  PvP   Normal United States
-## realms.4    Aggramar   180922 106804  PvE   Normal United States
-## realms.5       Akama    29495  55193  PvP   Normal United States
-## realms.6 Alexstrasza   111128  59291  PvE   Normal United States
-##                     TimeZone
-## realms.1 America/Los_Angeles
-## realms.2 America/Los_Angeles
-## realms.3 America/Los_Angeles
-## realms.4 America/Los_Angeles
-## realms.5 America/Los_Angeles
-## realms.6 America/Los_Angeles
+##            RealmName Alliance  Horde Type Roleplay        Region           TimeZone
+## realms.1     Aegwynn    71705  71877  PvP   Normal United States America/Los_Angeles
+## realms.2  Aerie Peak   275469  90698  PvE   Normal United States America/Los_Angeles
+## realms.3   Agamaggan    24256  28345  PvP   Normal United States America/Los_Angeles
+## realms.4    Aggramar   180922 106804  PvE   Normal United States America/Los_Angeles
+## realms.5       Akama    29495  55193  PvP   Normal United States America/Los_Angeles
+## realms.6 Alexstrasza   111128  59291  PvE   Normal United States America/Los_Angeles
+## 
 ```
 
 ```r
