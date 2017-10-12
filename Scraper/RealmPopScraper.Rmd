@@ -1,3 +1,8 @@
+---
+output: 
+  html_document: 
+    keep_md: yes
+---
 
 ## RealmPop Scraper in R
 
@@ -12,10 +17,12 @@ This scraper may get updated as I analyze more pieces of statistics from the web
 
 The data source for the webpage is in JSON format found [here]("http://realmpop.com/us.json"). To reformat this into a data frame, I'm going to use the `R` package `jsonlite`, which is a fast JSON parser.
 
+```{r setoptions, echo = FALSE, warning = FALSE}
+library(knitr)
+opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
 
-
-
-```r
+```{r}
 library(jsonlite)
 ```
 
@@ -25,8 +32,7 @@ library(jsonlite)
 
 Read in the data.
 
-
-```r
+```{r}
 # Read the JSON on the main page
 URL <- "http://realmpop.com/us.json"
 
@@ -38,56 +44,27 @@ RealmPop <- lapply(data, function(realm){data.frame(matrix(unlist(realm), ncol=9
 RealmPop <- do.call(rbind, RealmPop)
 
 dim(RealmPop)
-```
-
-```
-## [1] 26255     9
-```
-
-```r
 tail(RealmPop)
-```
-
-```
-##                      X1   X2   X3   X4   X5   X6   X7   X8   X9
-## demographics.26003 <NA> <NA> <NA> <NA> <NA> <NA> <NA> <NA> <NA>
-## demographics.26004 <NA> <NA> <NA> <NA> <NA> <NA> <NA> <NA> <NA>
-## demographics.26005 <NA> <NA> <NA> <NA>   32 <NA> <NA> <NA> <NA>
-## demographics.26006 <NA> <NA> <NA> <NA>   16 <NA> <NA> <NA> <NA>
-## demographics.26007 <NA> <NA> <NA> <NA>    2 <NA> <NA> <NA> <NA>
-## demographics.26008 <NA> <NA> <NA>    2 <NA> <NA> <NA> <NA> <NA>
 ```
 
 As you can see, the tail-end of our data frame `RealmPop` shows that the JSON file has a lot more information than we need for the faction analysis (there's currently 26255 rows!). All I really need is the information for all the realms, not necessarily the demographics (maybe for a different analysis!). So I'll get rid of the extra data to make a smaller data frame.
 
 I know that the last realm alphabetically is Zuluhed, so I want that to be the last row in the data frame.
 
-
-```r
+```{r}
 # Find the Zuluhed row in the data frame
 index <- which(RealmPop$X1 == "Zuluhed")
 index
-```
 
-```
-## [1] 246
-```
-
-```r
 # Keep only the realms rows
 RealmPop <- RealmPop[1:index, ] 
 
 dim(RealmPop)
 ```
 
-```
-## [1] 246   9
-```
-
 Now that I have the data I need, I'm going to clean up the data frame by renaming the columns and making sure that the numbers I'll need are a numeric class.
 
-
-```r
+```{r}
 # Keep only the columns I'm interested in
 RealmPop <- RealmPop[ -c(4:5)]
 colnames(RealmPop) <- c("RealmName", "Alliance", "Horde", "Type", "Roleplay", "Region", "TimeZone")
@@ -98,44 +75,13 @@ RealmPop$Alliance <- as.numeric(levels(RealmPop$Alliance))[RealmPop$Alliance]
 RealmPop$Horde <- as.numeric(levels(RealmPop$Horde))[RealmPop$Horde]
 
 head(RealmPop)
-```
 
-```
-##            RealmName Alliance  Horde Type Roleplay        Region
-## realms.1     Aegwynn    71705  71877  PvP   Normal United States
-## realms.2  Aerie Peak   275469  90698  PvE   Normal United States
-## realms.3   Agamaggan    24256  28345  PvP   Normal United States
-## realms.4    Aggramar   180922 106804  PvE   Normal United States
-## realms.5       Akama    29495  55193  PvP   Normal United States
-## realms.6 Alexstrasza   111128  59291  PvE   Normal United States
-##                     TimeZone
-## realms.1 America/Los_Angeles
-## realms.2 America/Los_Angeles
-## realms.3 America/Los_Angeles
-## realms.4 America/Los_Angeles
-## realms.5 America/Los_Angeles
-## realms.6 America/Los_Angeles
-```
-
-```r
 str(RealmPop)
-```
-
-```
-## 'data.frame':	246 obs. of  7 variables:
-##  $ RealmName: chr  "Aegwynn" "Aerie Peak" "Agamaggan" "Aggramar" ...
-##  $ Alliance : num  71705 275469 24256 180922 29495 ...
-##  $ Horde    : num  71877 90698 28345 106804 55193 ...
-##  $ Type     : Factor w/ 2 levels "PvE","PvP": 2 1 2 1 2 1 1 2 2 1 ...
-##  $ Roleplay : Factor w/ 2 levels "Normal","RP": 1 1 1 1 1 1 1 1 1 1 ...
-##  $ Region   : Factor w/ 4 levels "Brazil","Latin America",..: 4 4 4 4 4 4 4 4 4 3 ...
-##  $ TimeZone : Factor w/ 3 levels "America/Los_Angeles",..: 1 1 1 1 1 1 1 1 1 3 ...
 ```
 
 Save the data so we can use it for the analysis.
 
-
-```r
+```{r}
 # Save and timestamp the data
 save(RealmPop, file = paste0("RealmPop_", format(Sys.Date(), "%m-%d-%Y"), ".Rda"))
 ```
