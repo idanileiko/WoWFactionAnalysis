@@ -18,11 +18,11 @@ Recently I joined a PvP realm for the first time after mostly playing PvE to pla
 
 ### Load in Realm Population Data from RealmPop.com
 
-The first step was seeking out some population data. How many players are on each realm and how many of them are members of each faction? For the first part of my analysis I decided to look at [RealmPop]("https://realmpop.com/us.html"), focusing on the US servers.
+The first step was seeking out some population data. How many players are on each realm and how many of them are members of each faction? For the first part of my analysis I decided to look at [RealmPop](http://realmpop.com/us.html), focusing on the US servers.
 
-The data will be taken from the [JSON source]("http://realmpop.com/us.json") for RealmPop. It's important to note that the numbers that will be in the analysis from this source do not exactly match the numbers in the generated tables on the main RealmPop page. This is because the source file does not include connected realms (realms across which characters can interact), but the tables on the site do.
+The data will be taken from the [JSON source](http://realmpop.com/us.json) for RealmPop. It's important to note that the numbers that will be in the analysis from this source do not exactly match the numbers in the generated tables on the main RealmPop page. This is because the source file does not include connected realms (realms across which characters can interact), but the tables on the site do.
 
-The data that will be loaded in for this analysis was scraped from RealmPop. The details of this process can be found [here]("http://github.com/idanileiko/WoWFactionAnalysis/tree/master/Scraper"), in the scraper part of this repo.
+The data that will be loaded in for this analysis was scraped from RealmPop. The details of this process can be found [here](http://github.com/idanileiko/WoWFactionAnalysis/tree/master/Scraper), in the scraper part of this repo.
 
 
 
