@@ -3,14 +3,14 @@
 
 ### Synopsis
 
-The site [RealmPop]("http://realmpop.com/") contains data on World of Warcraft characters, races, classes, etc. for all of the different realms of the game. I was interested in the faction distributions over the different types of realms, specifically the differences between PvP and PvE realms. For this I scraped the following data from the [US Realms page]("https://realmpop.com/us.html"):
+The site [RealmPop]("http://realmpop.com/") contains data on World of Warcraft characters, races, classes, etc. for all of the different realms of the game. I was interested in the faction distributions over the different types of realms, specifically the differences between PvP and PvE realms. For this I scraped the following data from the [US Realms page](http://realmpop.com/us.html):
 
 * Realm: Name & Type (PvP, PvE, RP)
 * Realm Stats: Alliance population, Horde population
 
 This scraper may get updated as I analyze more pieces of statistics from the website, such as character race or class choice preferences, regions, EU servers, etc.
 
-The data source for the webpage is in JSON format found [here]("http://realmpop.com/us.json"). To reformat this into a data frame, I'm going to use the `R` package `jsonlite`, which is a fast JSON parser.
+The data source for the webpage is in JSON format found [here](http://realmpop.com/us.json). To reformat this into a data frame, I'm going to use the `R` package `jsonlite`, which is a fast JSON parser.
 
 
 
