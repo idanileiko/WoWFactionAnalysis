@@ -1,3 +1,8 @@
+---
+output: 
+  html_document: 
+    keep_md: yes
+---
 
 ## World of Warcraft Realms & Factions Analysis in R
 
@@ -24,10 +29,12 @@ The data will be taken from the [JSON source]("http://realmpop.com/us.json") for
 
 The data that will be loaded in for this analysis was scraped from RealmPop. The details of this process can be found [here]("http://github.com/idanileiko/WoWFactionAnalysis/tree/master/Scraper"), in the scraper part of this repo.
 
+```{r setoptions, echo = FALSE, warning = FALSE}
+library(knitr)
+opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
 
-
-
-```r
+```{r}
 # Load in the data frame; change the timestamp date to match the file that is saved
 timestamp <- "10-12-2017"
 filename <- paste0("RealmPop_", timestamp, ".Rda")
@@ -42,14 +49,12 @@ In order to see if PvP realms more likely to be heavily skewed in favor of one f
 
 Load in all the packages that will be used in this analysis.
 
-
-```r
+```{r}
 library(reshape2)
 library(ggplot2)
 ```
 
-
-```r
+```{r}
 # Separate into PvP and PvE realms
 PvPrealms <- subset(RealmPop, Type == "PvP")
 PvErealms <- subset(RealmPop, Type == "PvE")
@@ -72,8 +77,7 @@ PvErealms <- PvErealms[order(PvErealms$Alliance), ]
 
 In order to get the data frames ready for plotting, we need to use the function `melt` from the `reshape2` package to reformat the data frames from a wide format to a long format.
 
-
-```r
+```{r}
 # Reformat PvP data
 PvPdata <- melt(PvPrealms)
 names(PvPdata)[6] <- "Faction"
@@ -89,28 +93,22 @@ PvEdata$RealmName <- factor(PvEdata$RealmName, levels = PvEdata$RealmName)
 
 <div class = "row">
 <div class = "col-md-6">
-
-```r
+```{r}
 ggplot(PvPdata, aes(x = RealmName, y = Proportion, fill = Faction)) + 
   geom_bar(stat="identity", position = "stack") +
   coord_flip() + scale_fill_manual(values=c("#033069", "#9e0e03")) +
   labs(title= "PvP Realm Distribution", y = "Proportion of Population", x = "Realm") +
   scale_x_discrete(breaks = NULL)
 ```
-
-![](RealmFactionAnalysis_files/figure-html/unnamed-chunk-5-1.png)<!-- -->
 </div>
 <div class = "col-md-6">
-
-```r
+```{r}
 ggplot(PvEdata, aes(x = RealmName, y = Proportion, fill = Faction)) + 
   geom_bar(stat="identity", position = "stack") +
   coord_flip() + scale_fill_manual(values=c("#033069", "#9e0e03")) +
   labs(title= "PvE Realm Distribution", y = "Proportion of Population", x = "Realm") +
   scale_x_discrete(breaks = NULL)
 ```
-
-![](RealmFactionAnalysis_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
 </div>
 </div>
 
@@ -118,51 +116,28 @@ Let's see some exact numbers on how many realms have faction distributions that 
 
 <div class = "row">
 <div class = "col-md-6">
-
-```r
+```{r}
 # How many realms in PvP have a Alliance/Horde ratio between 0.40 and 0.60?
 sum(PvPrealms$Alliance >= 0.40 & PvPrealms$Alliance <= 0.60)
-```
 
-```
-## [1] 39
-```
-
-```r
 # How many realms in PvP have a Alliance/Horde ratio under 0.30 or over 0.70?
 sum(PvPrealms$Alliance <= 0.30 | PvPrealms$Alliance >= 0.70)
 ```
-
-```
-## [1] 34
-```
 </div>
 <div class = "col-md-6">
-
-```r
+```{r}
 # How many realms in PvE have a Alliance/Horde ratio between 0.40 and 0.60?
 sum(PvErealms$Alliance >= 0.40 & PvErealms$Alliance <= 0.60)
-```
 
-```
-## [1] 57
-```
-
-```r
 # How many realms in PvE have a Alliance/Horde ratio under 0.30 or over 0.70?
 sum(PvErealms$Alliance <= 0.30 | PvErealms$Alliance >= 0.70)
-```
-
-```
-## [1] 16
 ```
 </div>
 </div>
 
 It does look like PvP types have slightly more realms that are skewed toward preferring one faction over the other than PvE game types do. Out of 112 PvP realms, 30% of them have Alliance/Horde ratios either under 0.30 or over 0.70. This is contrasted with that out of 134 PvE realms, only 12% of them have Alliance/Horde ratios under 0.30 or over 0.70.
 
-
-```r
+```{r}
 # Stats on populations of PvP and PvE realms
 stats <- matrix(c(min(totalPvP), max(totalPvP), mean(totalPvP), median(totalPvP), sd(totalPvP),
                   min(totalPvE), max(totalPvE), mean(totalPvE), median(totalPvE), sd(totalPvE)),
@@ -174,19 +149,9 @@ stats <- as.table(stats)
 stats
 ```
 
-```
-##               PvP       PvE
-## minimum   28752.0   81239.0
-## maximum 1016719.0 1020872.0
-## mean     150556.0  178273.5
-## median    84079.5  122632.0
-## sd       190190.0  152760.1
-```
-
 PvP realms have a wider distribution of population numbers, seen by the larger standard deviation. But both game types have realms that have less than 100 thousand players and realms that have more than 1 million players. Let's look at the more populated realms in both game types, since those have more players that are making a race/faction choice.
 
-
-```r
+```{r}
 # Add a total population column to the original data frame
 RealmPop$Total <- RealmPop$Alliance + RealmPop$Horde
 
@@ -211,28 +176,22 @@ Let's make similar graphs as before but having fewer realms will make it easier 
 
 <div class = "row">
 <div class = "col-md-6">
-
-```r
+```{r}
 # Plot of faction proportions for PvP top population data
 ggplot(PvPdataTop, aes(x = RealmName, y = Proportion, fill = Faction)) + 
   geom_bar(stat="identity", position = "stack") +
   coord_flip() + scale_fill_manual(values=c("#033069", "#9e0e03")) +
   labs(title= "PvP Realm Distribution", y = "Proportion of Population", x = "Realm")
 ```
-
-![](RealmFactionAnalysis_files/figure-html/unnamed-chunk-11-1.png)<!-- -->
 </div>
 <div class = "col-md-6">
-
-```r
+```{r}
 # Plot of faction proportions for PvE top population data
 ggplot(PvEdataTop, aes(x = RealmName, y = Proportion, fill = Faction)) + 
   geom_bar(stat="identity", position = "fill") +
   coord_flip() + scale_fill_manual(values=c("#033069", "#9e0e03")) +
   labs(title= "PvE Realm Distribution", y = "Proportion of Population", x = "Realm")
 ```
-
-![](RealmFactionAnalysis_files/figure-html/unnamed-chunk-12-1.png)<!-- -->
 </div>
 </div>
 
@@ -246,8 +205,7 @@ The evidence for one faction dominating the other in PvP realms is not perfectly
 
 Let's see what the proportion is of Alliance and Horde characters on both types of realms.
 
-
-```r
+```{r}
 # Number of Horde & Alliance Numbers on the realms
 factionNum <- matrix(c(sum(PvPpop$Alliance), sum(PvPpop$Horde), sum(PvEpop$Alliance), sum(PvEpop$Horde)),
                      ncol=2,byrow=FALSE)
@@ -255,15 +213,7 @@ colnames(factionNum) <- c("PvP","PvE")
 rownames(factionNum) <- c("Alliance", "Horde")
 factionNum <- as.table(factionNum)
 factionNum
-```
 
-```
-##               PvP      PvE
-## Alliance  6942566 14024171
-## Horde     9919710  9864479
-```
-
-```r
 # Proportion of Horde & Alliance Numbers on the realms
 factionPop <- matrix(c(sum(PvPpop$Alliance)/sum(PvPpop$Total), sum(PvPpop$Horde)/sum(PvPpop$Total),
                   sum(PvEpop$Alliance)/sum(PvEpop$Total), sum(PvEpop$Horde)/sum(PvEpop$Total)),
@@ -273,12 +223,6 @@ colnames(factionPop) <- c("PvP","PvE")
 rownames(factionPop) <- c("Alliance", "Horde")
 factionPop <- as.table(factionPop)
 factionPop
-```
-
-```
-##            PvP   PvE
-## Alliance 0.412 0.587
-## Horde    0.588 0.413
 ```
 
 This is really interesting. The ratios of Alliance to Horde characters is almost exactly reversed. PvE realms have more players in total, since there are more PvE realms (134 vs. 112 PvP ones). Despite that, there are around the same number of Horde characters on both, a little under 10 million. However, there are about double the Alliance characters on PvE realms (around 14 million vs. around 7 million for PvP realms).
